@@ -1,0 +1,38 @@
+Resultados para 16 quadros na memória cahe:
+===========================================
+
+Mapeamento: DIRETO
+ Fração de acertos às referências de memória: 22 / 105 --> 20,95%
+ Fração de falhas às referências de memória : 83 / 105 --> 79,05%
+
+Mapeamento: ASSOCIATIVO & Substituição: FIFO
+ Fração de acertos às referências de memória: 18 / 105 --> 17,14%
+ Fração de falhas às referências de memória : 87 / 105 --> 82,86%
+
+Mapeamento: ASSOCIATIVO & Substituição: LRU
+ Fração de acertos às referências de memória: 17 / 105 --> 16,19%
+ Fração de falhas às referências de memória : 88 / 105 --> 83,81%
+
+Mapeamento: ASSOCIATIVO & Substituição: LFU
+ Fração de acertos às referências de memória: 17 / 105 --> 16,19%
+ Fração de falhas às referências de memória : 88 / 105 --> 83,81%
+
+Mapeamento: ASSOCIATIVO & Substituição: RANDOM
+ Fração de acertos às referências de memória: 23 / 105 --> 21,90%
+ Fração de falhas às referências de memória : 82 / 105 --> 78,10%
+
+Mapeamento: ASSOCIATIVO POR CONJUNTOS & Substituição: FIFO
+ Fração de acertos às referências de memória: 18 / 105 --> 17,14%
+ Fração de falhas às referências de memória : 87 / 105 --> 82,86%
+
+Mapeamento: ASSOCIATIVO POR CONJUNTOS & Substituição: LRU
+ Fração de acertos às referências de memória: 18 / 105 --> 17,14%
+ Fração de falhas às referências de memória : 87 / 105 --> 82,86%
+
+Mapeamento: ASSOCIATIVO POR CONJUNTOS & Substituição: LFU
+ Fração de acertos às referências de memória: 18 / 105 --> 17,14%
+ Fração de falhas às referências de memória : 87 / 105 --> 82,86%
+
+Mapeamento: ASSOCIATIVO POR CONJUNTOS & Substituição: RANDOM
+ Fração de acertos às referências de memória: 20 / 105 --> 19,05%
+ Fração de falhas às referências de memória : 85 / 105 --> 80,95%
