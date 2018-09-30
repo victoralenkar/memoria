@@ -2,8 +2,10 @@ package memoria;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public class MapeamentoAssociativoConjunto extends Cache {
@@ -11,19 +13,22 @@ public class MapeamentoAssociativoConjunto extends Cache {
 	private int[] ponteiro;
 	private int tamanhoConjunto;
 	private int qtdeConjunto;
-	private int[][] acessos;
+	private Map<Integer, NoFrequencia> frequencias;
 
 	public MapeamentoAssociativoConjunto(int tamanho, int qtdeConjuntos, PoliticaInsercaoEnum politica) {
 		super.cache = new Integer[tamanho];
 		this.tamanhoConjunto = tamanho / qtdeConjuntos;
 		this.qtdeConjunto = qtdeConjuntos;
 		this.ponteiro = new int[qtdeConjuntos];
+		frequencias = new HashMap<>();
 		for (int i = 0; i < qtdeConjuntos; i++) {
 			this.ponteiro[i] = 0;
 		}
 		super.politica = politica;
 		if (super.politica == PoliticaInsercaoEnum.LFU) {
-			acessos = new int[qtdeConjuntos][this.tamanhoConjunto];
+			for (int i = 0; i < qtdeConjunto; i++) {
+				frequencias.put(i, new NoFrequencia(-1, -1));
+			}
 		}
 	}
 
@@ -43,7 +48,8 @@ public class MapeamentoAssociativoConjunto extends Cache {
 		for (int i = 0; i < tamanhoConjunto; i++) {
 			if (conjunto[i] != null && conjunto[i].intValue() == pagina) {
 				if (super.politica == PoliticaInsercaoEnum.LFU) {
-					acessos[indiceConjunto][i]++;
+					frequencias.get(indiceConjunto).adicionar(pagina);
+					System.out.println(frequencias.get(indiceConjunto).toString());
 				}
 				hit = true;
 				break;
@@ -109,19 +115,25 @@ public class MapeamentoAssociativoConjunto extends Cache {
 	}
 
 	private void inserirLFU(int pagina) {
-		int indiceConjunto = pagina % this.qtdeConjunto;
-		int anteriorMenor = acessos[indiceConjunto][0];
-		int ponteiro = 0;
-		for (int i = 1; i < tamanhoConjunto; i++) {
-			if (acessos[indiceConjunto][i] < anteriorMenor) {
-				anteriorMenor = acessos[indiceConjunto][i];
-				ponteiro = i;
+		int indiceConjunto = pagina % this.qtdeConjunto;		
+		Integer conjunto[] = this.getConjunto(pagina);
+		int chaveSubstituir = frequencias.get(indiceConjunto).getChaveMenorFrequencia(tamanhoConjunto);
+		for (int i = 0; i < conjunto.length; i++) {
+			if (chaveSubstituir==-1 && conjunto[i]==null) {
+				conjunto[i] = pagina;
+				break;
+			} else {
+				if (chaveSubstituir==conjunto[i]) {
+					conjunto[i] = pagina;
+					break;
+				}
 			}
 		}
-		Integer conjunto[] = this.getConjunto(pagina);
-		conjunto[ponteiro] = pagina;
-		acessos[indiceConjunto][ponteiro] = 1;
+		
+		frequencias.get(indiceConjunto).adicionar(pagina);
+		frequencias.get(indiceConjunto).atualizarChaves(conjunto);
 		this.inserirConjunto(indiceConjunto, conjunto);
+		System.out.println(frequencias.get(indiceConjunto).toString());
 	}
 
 }
