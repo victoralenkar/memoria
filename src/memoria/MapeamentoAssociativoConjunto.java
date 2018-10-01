@@ -49,7 +49,6 @@ public class MapeamentoAssociativoConjunto extends Cache {
 			if (conjunto[i] != null && conjunto[i].intValue() == pagina) {
 				if (super.politica == PoliticaInsercaoEnum.LFU) {
 					frequencias.get(indiceConjunto).adicionar(pagina);
-					System.out.println(frequencias.get(indiceConjunto).toString());
 				}
 				hit = true;
 				break;
@@ -132,8 +131,7 @@ public class MapeamentoAssociativoConjunto extends Cache {
 		
 		frequencias.get(indiceConjunto).adicionar(pagina);
 		frequencias.get(indiceConjunto).atualizarChaves(conjunto);
-		this.inserirConjunto(indiceConjunto, conjunto);
-		System.out.println(frequencias.get(indiceConjunto).toString());
+		this.inserirConjunto(indiceConjunto, conjunto);		
 	}
 
 }

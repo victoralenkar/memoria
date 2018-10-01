@@ -9,14 +9,14 @@ import java.util.Random;
 public class MapeamentoAssociativo extends Cache {
 
 	private int ponteiro;
-	private int[] acessos;
+	private NoFrequencia frequencias;
 
 	public MapeamentoAssociativo(int tamanho, PoliticaInsercaoEnum politica) {
 		super.cache = new Integer[tamanho];
 		this.ponteiro = 0;
 		super.politica = politica;
 		if (super.politica == PoliticaInsercaoEnum.LFU) {
-			acessos = new int[tamanho];
+			frequencias = new NoFrequencia(-1, -1);
 		}
 	}
 
@@ -25,7 +25,7 @@ public class MapeamentoAssociativo extends Cache {
 		for (int i = 0; i < cache.length; i++) {
 			if (cache[i] != null && cache[i].intValue() == pagina) {
 				if (super.politica == PoliticaInsercaoEnum.LFU) {
-					acessos[i]++;
+					frequencias.adicionar(pagina);
 				}
 				hit = true;
 				break;
@@ -59,16 +59,20 @@ public class MapeamentoAssociativo extends Cache {
 	}
 
 	private void inserirLFU(int pagina) {
-		int anteriorMenor = acessos[0];
-		ponteiro = 0;
-		for (int i = 0; i < acessos.length; i++) {
-			if (acessos[i] < anteriorMenor) {
-				anteriorMenor = acessos[i];
-				ponteiro = i;
+		int chaveSubstituir = frequencias.getChaveMenorFrequencia(super.cache.length);
+		for (int i = 0; i < super.cache.length; i++) {
+			if (chaveSubstituir == -1 && super.cache[i] == null) {
+				super.cache[i] = pagina;
+				break;
+			} else {
+				if (chaveSubstituir == super.cache[i]) {
+					super.cache[i] = pagina;
+					break;
+				}
 			}
 		}
-		cache[ponteiro] = pagina;
-		acessos[ponteiro]++;
+		frequencias.adicionar(pagina);
+		frequencias.atualizarChaves(super.cache);
 	}
 
 	private void inserirLRU(int pagina) {
@@ -93,14 +97,6 @@ public class MapeamentoAssociativo extends Cache {
 
 	public void setPonteiro(int ponteiro) {
 		this.ponteiro = ponteiro;
-	}
-
-	public int[] getAcessos() {
-		return acessos;
-	}
-
-	public void setAcessos(int[] acessos) {
-		this.acessos = acessos;
 	}
 
 }
